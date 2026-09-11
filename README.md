@@ -1,27 +1,20 @@
 # two-ph-protein-electrostatics
 
-Harbor tasks for [Terminal-Bench Science](https://www.terminal-bench-science.ai/): treat **pH as a first-class state variable** in protein agent workflows.
+Harbor draft for [Terminal-Bench Science](https://www.terminal-bench-science.ai/) proposal **#979**.
 
-Frontier agents fold, dock, and rank proteins at a single default pH (7 or 7.4). Biology is compartmentalized. Histidine occupancy flips between endosome (pH 5.5) and cytosol (pH 7.4). These tasks make that failure numeric on **public peptides only**.
+Frontier agents treat proteins as pH-invariant. This task ranks public peptides by how much net side-chain charge moves between endosome and cytosol. The seed pipeline looks complete; occupancy must actually follow the compartment pH in `job.json`.
 
-Apache-2.0. No unpublished ligands. This repository is not MoleculoSphere and is not a therapeutic program.
+Apache-2.0. Public peptides only (`HHHHHH`, `KSRRRAR`). Not MoleculoSphere. Not a therapeutic program.
 
-## Tasks
+## Task
 
-| Folder | What a pH-blind agent does | Oracle |
-|---|---|---|
-| `tasks/physical-sciences/chemistry/agent-debug-wrong-protonation` | ships a seed script frozen at pH 7.4 | patched code + occupancy at **both** 5.5 and 7.4 |
-| `tasks/physical-sciences/chemistry/his-protonation-microstates` | one table, no second pH | `occupancy.csv` for HHHHHH and KSRRRAR |
+`tasks/physical-sciences/chemistry/two-ph-rank-public-peptides/`
 
-## Bot team
+- `instruction.md` — does not name a leaked default
+- `environment/pipeline.py` — starter that writes occupancy + rank
+- `environment/data/job.json` + `pka_table.csv`
+- `solution/solve.sh` + `tests/`
 
-Operating charter: [`BOT_TEAM.md`](BOT_TEAM.md).
+## Status
 
-## Approach to TB-Science
-
-1. Discord `#tb-science` then `#tb-science-task-ideas`
-2. [Task proposal form](https://airtable.com/appzZC5gEHrXSfNNw/pagjgS95lAQ5FVJxt/form)
-3. Short email to `stevendi@stanford.edu` with this repo + the form id
-4. PR only after the proposal is approved
-
-Draft copy lives in [`authoring/`](authoring/).
+Proposal #979 is on the TB-Science board. Human reviewer: `@MrtinoRG`. Do not open a PR on `harbor-framework/terminal-bench-science` until they say build.
