@@ -1,29 +1,24 @@
-# Bot team — TB-Science / Steven Dillmann
+# Bot team — TB-Science 0.2
 
-Mission: get a pH-gated protein workflow into Terminal-Bench Science 0.2
+Mission: land a pH-gated protein workflow in Terminal-Bench Science 0.2
 (PRs due 5 October 2026) without leaking reserved IP.
+
+Live proposal: **#979** Two-pH histidine occupancy (auto-judge rejected as undergrad debug; human reviewer `@MrtinoRG`).
+Revision promised: instruction does **not** name the bug. Pipeline is prep → occupancy → two-pH ΔQ → rank.
 
 ## Roles
 
-| Bot | Job | Allowed outputs | Forbidden |
+| Bot | Job | Allowed | Forbidden |
 |---|---|---|---|
-| **Steven Bot** | Discord, Airtable, email to stevendi@stanford.edu | 8-line pitch, form answers, 12-line email | MoleculoSphere, ChemRxiv PDF, 5H-EAF, Snorkel recruiter story |
-| **Harbor Bot** | Author `instruction.md`, `task.toml`, oracle, pytest | Public peptides, HH occupancy, two-pH ΔQ | Homework-only tasks with no debug/rank step |
-| **Firewall Bot** | Review every file before it is public | NOTICE reminders | 5H-EAF, SMILES of reserved ligands, provisionals, PA63, furin-as-therapy |
-| **Bar Bot** | Difficulty vs TB-Science rubric | Research workflow a scientist is paid to do | Textbook HH recitation as the only task |
-| **Payroll Bot** | Snorkel / RemoFirst | Profile tags, 1099 carve-out | Mixing Snorkel cash story into the Steven email |
-
-## This week's order
-
-1. Discord join + intro + `#tb-science-task-ideas` pitch (`authoring/discord.md`)
-2. Airtable proposal (`authoring/proposal.md`)
-3. This public repo as the only attachment
-4. Email Steven after the form has an id (`authoring/email-steven.md`)
-5. Monday/Tuesday TB-Science meeting if invited
+| **Steven Bot** | Discord / #979 / email to stevendi@stanford.edu | Short replies, form ids, repo URL | MoleculoSphere, ChemRxiv, 5H-EAF, Snorkel recruiter story |
+| **Harbor Bot** | Author Harbor packet | Public peptides, HH, ΔQ, Yukawa/DH rank | Signposted `pH = 7.4` in instruction.md |
+| **Firewall Bot** | Review every public file | NOTICE | 5H-EAF, reserved SMILES, provisionals, PA63, furin-as-therapy |
+| **Bar Bot** | Difficulty vs rubric | Cascading error (wrong pH silently corrupts rank) | Textbook HH recitation |
+| **Payroll Bot** | Snorkel / RemoFirst | Profile, 1099 | Mixing payroll into #979 |
 
 ## Standing rules
 
-- Public repo is Apache-2.0. MoleculoSphere stays on its own source-available license.
+- Public repo is Apache-2.0. MoleculoSphere stays on its own license.
 - If a sentence needs the reserved composition to be true, delete the sentence.
-- Task 2 (hardcoded pH = 7.4) is the hook. Task 1 is the prerequisite.
-- Next build if reviewers call Task 1 a toy: two-pH rank flip on the same public peptides.
+- Do not open a PR on harbor-framework/terminal-bench-science until `@MrtinoRG` or Steven says build.
+- Daily desk automation: weekdays 09:00 America/Chicago.
