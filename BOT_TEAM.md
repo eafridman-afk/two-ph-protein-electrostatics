@@ -1,24 +1,25 @@
-# Bot team — TB-Science 0.2
+# Bot team — live
 
-Mission: land a pH-gated protein workflow in Terminal-Bench Science 0.2
-(PRs due 5 October 2026) without leaking reserved IP.
+Mission: land TB-Science 0.2 proposal **#979** (upscoped) without leaking reserved IP.
+Human reviewer: `@MrtinoRG`. Auto-judge was advisory Reject (too easy / signposted). We upscoped.
 
-Live proposal: **#979** Two-pH histidine occupancy (auto-judge rejected as undergrad debug; human reviewer `@MrtinoRG`).
-Revision promised: instruction does **not** name the bug. Pipeline is prep → occupancy → two-pH ΔQ → rank.
+Repo: https://github.com/eafridman-afk/two-ph-protein-electrostatics
+Deadline: PRs 5 October 2026.
 
-## Roles
+## Bots
 
-| Bot | Job | Allowed | Forbidden |
-|---|---|---|---|
-| **Steven Bot** | Discord / #979 / email to stevendi@stanford.edu | Short replies, form ids, repo URL | MoleculoSphere, ChemRxiv, 5H-EAF, Snorkel recruiter story |
-| **Harbor Bot** | Author Harbor packet | Public peptides, HH, ΔQ, Yukawa/DH rank | Signposted `pH = 7.4` in instruction.md |
-| **Firewall Bot** | Review every public file | NOTICE | 5H-EAF, reserved SMILES, provisionals, PA63, furin-as-therapy |
-| **Bar Bot** | Difficulty vs rubric | Cascading error (wrong pH silently corrupts rank) | Textbook HH recitation |
-| **Payroll Bot** | Snorkel / RemoFirst | Profile, 1099 | Mixing payroll into #979 |
+| Bot | File | Job |
+|---|---|---|
+| Steven | `bots/steven.md` | Discord / #979 / email. Never attaches reserved IP. |
+| Harbor | `bots/harbor.md` | Author unsignposted Harbor tasks. |
+| Firewall | `bots/firewall.md` | Block reserved composition, SMILES, provisionals, MoleculoSphere source. |
+| Bar | `bots/bar.md` | Kill textbook-only and signposted bugs. |
+| Payroll | `bots/payroll.md` | Snorkel / RemoFirst. Separate from Steven. |
 
 ## Standing rules
 
-- Public repo is Apache-2.0. MoleculoSphere stays on its own license.
-- If a sentence needs the reserved composition to be true, delete the sentence.
-- Do not open a PR on harbor-framework/terminal-bench-science until `@MrtinoRG` or Steven says build.
-- Daily desk automation: weekdays 09:00 America/Chicago.
+1. Instruction.md never names the defect.
+2. Public peptides only: HHHHHH, KSRRRAR.
+3. Apache-2.0 in this repo.
+4. No PR to harbor-framework/terminal-bench-science until a human reviewer says build.
+5. If a sentence needs a reserved composition to be true, delete the sentence.
