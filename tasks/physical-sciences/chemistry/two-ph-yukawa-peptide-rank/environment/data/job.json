@@ -1,0 +1,15 @@
+{
+  "peptides": ["HHHHHH", "KSRRRAR"],
+  "partner": "EEEEEE",
+  "compartments": {
+    "endosome": {"pH": 5.5},
+    "cytosol": {"pH": 7.4}
+  },
+  "ionic_strength_M": 0.15,
+  "outputs": {
+    "occupancy": "/app/occupancy.csv",
+    "energy": "/app/energy.csv",
+    "summary": "/app/summary.json",
+    "rank": "/app/rank.csv"
+  }
+}
