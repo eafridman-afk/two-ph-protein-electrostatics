@@ -7,7 +7,7 @@
     "EEEEEE": "EEEEEE.pdb"
   },
   "prep": {
-    "records": ["ATOM", "HETATM"],
+    "records": ["ATOM"],
     "drop_resnames": ["HOH", "WAT"],
     "altloc_keep": ["", "A"]
   },
