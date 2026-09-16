@@ -1,6 +1,16 @@
 {
-  "peptides": ["HHHHHH", "KSRRRAR"],
+  "peptides": ["1LYZ", "KSRRRAR"],
   "partner": "EEEEEE",
+  "pdb_files": {
+    "1LYZ": "1LYZ.pdb",
+    "KSRRRAR": "KSRRRAR.pdb",
+    "EEEEEE": "EEEEEE.pdb"
+  },
+  "prep": {
+    "records": ["ATOM", "HETATM"],
+    "drop_resnames": ["HOH", "WAT"],
+    "altloc_keep": ["", "A"]
+  },
   "compartments": {
     "endosome": {"pH": 5.5},
     "cytosol": {"pH": 7.4}
