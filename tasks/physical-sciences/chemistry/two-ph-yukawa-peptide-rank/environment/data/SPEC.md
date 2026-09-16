@@ -5,11 +5,11 @@
 
 ## PDB prep
 
-Read every `ATOM` and `HETATM` record in each file listed under `pdb_files` in `/app/data/job.json`.
+Read `ATOM` records in each file listed under `pdb_files` in `/app/data/job.json`. Ignore `HETATM` and every other record type.
 
 Then apply `prep` from the job file:
 
-- Drop any residue whose three-letter name is in `drop_resnames`.
+- Drop any residue whose three-letter name is in `drop_resnames` (water).
 - Keep an atom only if its altLoc is blank or in `altloc_keep` (`A` is listed). Discard other altLocs.
 - Do not build hydrogens. Do not call PROPKA, PDB2PQR, or APBS.
 
@@ -23,9 +23,6 @@ Residue identity is `(chain, resseq, icode, resname)`.
 | LYS | NZ | cationic |
 | ARG | CZ | cationic |
 | GLU | CD | anionic |
-| ASP | CG | anionic |
-| SER | OG | neutral |
-| ALA | CB | neutral |
 
 If the named atom is missing, or the residue name is not in this table, that residue contributes charge 0 and is recorded with `missing_center=true`.
 
@@ -40,14 +37,14 @@ frac = 1 / (1 + 10**(pH - pKa))
 charge = +frac
 ```
 
-Anionic (GLU, ASP):
+Anionic (GLU):
 
 ```
 frac = 1 / (1 + 10**(pKa - pH))
 charge = -frac
 ```
 
-Neutral, missing center, or residue not in the table: `frac = 0`, `charge = 0`.
+Missing center, or residue not in the table: `frac = 0`, `charge = 0`.
 
 ## Continuum pair energy
 
