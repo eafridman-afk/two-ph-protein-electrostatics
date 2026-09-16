@@ -1,0 +1,25 @@
+{
+  "peptides": ["1LYZ", "KSRRRAR"],
+  "partner": "EEEEEE",
+  "pdb_files": {
+    "1LYZ": "1LYZ.pdb",
+    "KSRRRAR": "KSRRRAR.pdb",
+    "EEEEEE": "EEEEEE.pdb"
+  },
+  "prep": {
+    "records": ["ATOM", "HETATM"],
+    "drop_resnames": ["HOH", "WAT"],
+    "altloc_keep": ["", "A"]
+  },
+  "compartments": {
+    "endosome": {"pH": 5.5},
+    "cytosol": {"pH": 7.4}
+  },
+  "ionic_strength_M": 0.15,
+  "outputs": {
+    "occupancy": "/app/occupancy.csv",
+    "energy": "/app/energy.csv",
+    "summary": "/app/summary.json",
+    "rank": "/app/rank.csv"
+  }
+}

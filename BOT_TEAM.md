@@ -19,7 +19,7 @@ Deadline: PRs 5 October 2026.
 ## Standing rules
 
 1. Instruction.md never names the defect.
-2. Public peptides only: HHHHHH, KSRRRAR.
+2. Public coordinates only: deposited 1LYZ plus KSRRRAR / EEEEEE.
 3. Apache-2.0 in this repo.
-4. No PR to harbor-framework/terminal-bench-science until a human reviewer says build.
+4. Human reviewer @MrtinoRG approved #1815 (`/approve`). Build from deposited public PDB 1LYZ. PR the raw-PDB packet, not the hexapeptide-only folder.
 5. If a sentence needs a reserved composition to be true, delete the sentence.
