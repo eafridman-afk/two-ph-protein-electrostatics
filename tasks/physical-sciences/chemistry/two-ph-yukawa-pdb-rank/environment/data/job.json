@@ -1,5 +1,4 @@
 {
-  "candidates": ["1LYZ", "KSRRRAR"],
   "peptides": ["1LYZ", "KSRRRAR"],
   "partner": "EEEEEE",
   "pdb_files": {
@@ -7,13 +6,8 @@
     "KSRRRAR": "KSRRRAR.pdb",
     "EEEEEE": "EEEEEE.pdb"
   },
-  "chains": {
-    "1LYZ": "A",
-    "KSRRRAR": "A",
-    "EEEEEE": "A"
-  },
   "prep": {
-    "records": ["ATOM"],
+    "records": ["ATOM", "HETATM"],
     "drop_resnames": ["HOH", "WAT"],
     "altloc_keep": ["", "A"]
   },

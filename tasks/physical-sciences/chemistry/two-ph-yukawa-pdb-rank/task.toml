@@ -6,7 +6,7 @@ schema_version = "1.4"
 artifacts = ["/app/occupancy.csv", "/app/energy.csv", "/app/summary.json", "/app/rank.csv"]
 
 [task]
-name = "terminal-bench-science/two-ph-yukawa-peptide-rank"
+name = "terminal-bench-science/two-ph-yukawa-pdb-rank"
 description = "Parse a deposited public PDB, protonate at two compartment pH values from a locked table, compute intermolecular Yukawa energy versus a public acidic partner, and rank by delta U."
 authors = [{ name = "Esteban A. Fridman", email = "eafridman@biochemdefensetech.com" }]
 keywords = ["pH", "histidine", "yukawa", "protein-electrostatics", "pdb"]
