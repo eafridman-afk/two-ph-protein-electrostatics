@@ -1,19 +1,18 @@
 import csv
 import json
 import math
+import os
 from pathlib import Path
 
-OCC = Path("/app/occupancy.csv")
-EN = Path("/app/energy.csv")
-SUM = Path("/app/summary.json")
-RANK = Path("/app/rank.csv")
-DATA = Path("/app/data")
+from recompute import expected
+
+APP = Path(os.environ.get("APP_ROOT", "/app"))
+OCC = APP / "occupancy.csv"
+EN = APP / "energy.csv"
+SUM = APP / "summary.json"
+RANK = APP / "rank.csv"
 ABS = 1e-3
 REL = 1e-4
-CENTER = {"HIS": "ND1", "LYS": "NZ", "ARG": "CZ", "GLU": "CD", "ASP": "CG", "SER": "OG", "ALA": "CB"}
-CATIONIC = {"HIS", "LYS", "ARG"}
-ANIONIC = {"GLU", "ASP"}
-COULOMB = 332.0636
 
 
 def close(a, b):
@@ -27,9 +26,49 @@ def test_artifacts_exist():
     assert RANK.is_file()
 
 
+def test_headers():
+    assert list(csv.DictReader(OCC.open()).fieldnames) == [
+        "structure",
+        "chain",
+        "resseq",
+        "icode",
+        "resname",
+        "atom",
+        "compartment",
+        "pH",
+        "pKa",
+        "frac",
+        "charge",
+        "missing_center",
+    ]
+    assert list(csv.DictReader(EN.open()).fieldnames) == ["structure", "compartment", "pH", "U"]
+    assert list(csv.DictReader(RANK.open()).fieldnames) == ["rank", "structure", "delta_U"]
+
+
+def test_prep_drops_water_and_counts_1lyz_residues():
+    rows = list(csv.DictReader(OCC.open()))
+    assert all(r["resname"] not in {"HOH", "WAT"} for r in rows)
+    lyz = [r for r in rows if r["structure"] == "1LYZ" and r["compartment"] == "endosome"]
+    assert len(lyz) == 129
+    his = [r for r in lyz if r["resname"] == "HIS"]
+    assert len(his) == 1
+    assert his[0]["resseq"] == "15"
+    assert his[0]["atom"] == "ND1"
+    assert his[0]["missing_center"] == "false"
+
+
+def test_missing_center_is_zero_for_unmapped_residues():
+    rows = list(csv.DictReader(OCC.open()))
+    cys = [r for r in rows if r["structure"] == "1LYZ" and r["resname"] == "CYS"]
+    tyr = [r for r in rows if r["structure"] == "1LYZ" and r["resname"] == "TYR"]
+    assert cys and tyr
+    assert all(r["missing_center"] == "true" for r in cys + tyr)
+    assert all(close(float(r["charge"]), 0.0) for r in cys + tyr)
+
+
 def test_his_occupancy_moves():
     rows = list(csv.DictReader(OCC.open()))
-    his = [r for r in rows if r["structure"] == "HHHHHH" and r["resname"] == "HIS"]
+    his = [r for r in rows if r["structure"] == "1LYZ" and r["resname"] == "HIS"]
     endo = [float(r["charge"]) for r in his if r["compartment"] == "endosome"]
     cyto = [float(r["charge"]) for r in his if r["compartment"] == "cytosol"]
     assert endo and cyto
@@ -41,24 +80,35 @@ def test_his_occupancy_moves():
         assert close(float(r["charge"]), expect)
 
 
-def test_glu_is_anionic_and_kappa_matches_job():
-    summary = json.loads(SUM.read_text())
-    job = json.loads((DATA / "job.json").read_text())
-    assert close(summary["kappa"], 0.329 * math.sqrt(float(job["ionic_strength_M"])))
-    rows = list(csv.DictReader(OCC.open()))
-    glu = [r for r in rows if r["structure"] == "EEEEEE" and r["resname"] == "GLU"]
-    assert glu and all(float(r["charge"]) < 0 for r in glu)
+def test_independent_recompute_matches_artifacts():
+    job, occ, energies, summary, ranked = expected()
+    got_sum = json.loads(SUM.read_text())
+    assert close(got_sum["kappa"], summary["kappa"])
+    assert close(got_sum["kappa"], 0.329 * math.sqrt(float(job["ionic_strength_M"])))
 
+    got_occ = list(csv.DictReader(OCC.open()))
+    assert len(got_occ) == len(occ)
+    by_key = {
+        (r["structure"], r["chain"], int(r["resseq"]), r["icode"], r["resname"], r["compartment"]): r
+        for r in got_occ
+    }
+    for row in occ:
+        key = (row["structure"], row["chain"], row["resseq"], row["icode"], row["resname"], row["compartment"])
+        got = by_key[key]
+        assert got["missing_center"] == ("true" if row["missing_center"] else "false")
+        assert close(float(got["charge"]), row["charge"])
+        assert close(float(got["frac"]), row["frac"])
 
-def test_rank_and_delta_u_require_two_pH_propagation():
-    summary = json.loads(SUM.read_text())
-    d_his = summary["peptides"]["HHHHHH"]["delta_U_endosome_minus_cytosol"]
-    d_arg = summary["peptides"]["KSRRRAR"]["delta_U_endosome_minus_cytosol"]
-    assert d_his < d_arg
+    got_en = {(r["structure"], r["compartment"]): float(r["U"]) for r in csv.DictReader(EN.open())}
+    for row in energies:
+        assert close(got_en[(row["structure"], row["compartment"])], row["U"])
+        assert close(got_sum["structures"][row["structure"]][f"U_{row['compartment']}"], row["U"])
+
     ranks = list(csv.DictReader(RANK.open()))
-    assert ranks[0]["peptide"] == "HHHHHH"
+    assert [r["structure"] for r in ranks] == ranked
     assert int(ranks[0]["rank"]) == 1
-    energy = {(r["peptide"], r["compartment"]): float(r["U"]) for r in csv.DictReader(EN.open())}
-    assert close(energy[("HHHHHH", "endosome")], summary["peptides"]["HHHHHH"]["U_endosome"])
-    # Frozen single-pH charges cannot produce a large His-driven ΔU.
-    assert d_his < -1.0
+    d0 = summary["structures"][ranked[0]]["delta_U_endosome_minus_cytosol"]
+    d1 = summary["structures"][ranked[1]]["delta_U_endosome_minus_cytosol"]
+    assert d0 < d1
+    # Frozen single-pH His charge cannot produce this endosome shift on 1LYZ vs EEEEEE.
+    assert summary["structures"]["1LYZ"]["delta_U_endosome_minus_cytosol"] < -5.0
