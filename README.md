@@ -4,7 +4,7 @@ Harbor draft for [Terminal-Bench Science](https://www.terminal-bench-science.ai/
 
 Frontier agents treat proteins as pH-invariant. This packet embeds histidine occupancy in a two-compartment Yukawa rank of public peptide coordinates versus a public acidic partner.
 
-Apache-2.0. Public peptides only (`HHHHHH`, `KSRRRAR`, `EEEEEE`). Not MoleculoSphere. Not a therapeutic program.
+Apache-2.0. Public peptides only (`HHHHHH`, `KSRRRAR`, `EEEEEE`). Not MoleculoSphere. Not a therapeutic program. The two-pH window is compartment chemistry (endosome / macrophage pH 5.5–6.5 versus cytosol ~7.4), not a delivery vehicle and not an oncology protocol.
 
 ## Review this
 
